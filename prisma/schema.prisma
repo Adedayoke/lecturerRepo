@@ -1,0 +1,68 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// Database Design: LectureMaterial Entity
+model LectureMaterial {
+  id          Int      @id @default(autoincrement()) // Primary Key - unique identifier
+  title       String   // Title of the lecture material
+  subject     String   // Subject/Course name
+  code        String   // Course code
+  filename    String   // Original filename
+  filepath    String   // Where file is stored on server
+  fileSize    Int      // File size in bytes
+  fileType    String   // File extension (pdf, docx, pptx)
+  uploadDate  DateTime @default(now()) // When was it uploaded
+  
+  // Foreign key to link with lecturer
+  lecturerId  Int
+  lecturer    Lecturer @relation(fields: [lecturerId], references: [id], onDelete: Cascade)
+  
+  // Index for better search performance
+  @@index([subject])
+  @@index([title])
+  @@index([code])
+  @@index([lecturerId]) // Index for lecturer relationship
+}
+
+model Lecturer {
+  id        Int      @id @default(autoincrement())
+  pfNumber  String   @unique
+  title     String   // Dr., Prof., Mr., Mrs., Ms.
+  firstName String?
+  lastName  String?
+  email     String?  @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relations
+  lecturerCourses LecturerCourse[]
+  lectureMaterials LectureMaterial[] // One lecturer can have many materials
+
+  @@map("lecturers")
+}
+
+// Junction table for many-to-many relationship between lecturers and courses
+model LecturerCourse {
+  id         Int      @id @default(autoincrement())
+  lecturerId Int
+  courseCode String
+  courseName String
+  
+  lecturer   Lecturer @relation(fields: [lecturerId], references: [id], onDelete: Cascade)
+  
+  @@unique([lecturerId, courseCode]) // Prevent duplicate course assignments
+  @@index([courseCode])
+}

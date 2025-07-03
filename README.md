@@ -1,36 +1,120 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Lecturer Material Storage App
 
-## Getting Started
+A modern web application for lecturers to securely upload, manage, and share course materials, built with Next.js, Prisma, and Cloudinary.
 
-First, run the development server:
+---
 
+## 🚀 Features
+- **Lecturer authentication** (login, protected routes)
+- **Admin-only lecturer creation**
+- **Upload lecture materials** (PDF, DOC, PPT, TXT, etc.)
+- **Cloudinary cloud storage** (no local files)
+- **Organize by course** (auto-assigns courses)
+- **Search and filter materials**
+- **Download and view files**
+- **Delete your own files** (with confirmation)
+- **Responsive, modern UI**
+
+---
+
+## 🛠️ Getting Started
+
+### 1. **Clone the Repository**
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone <repo-url>
+cd client
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 2. **Install Dependencies**
+```bash
+npm install
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 3. **Set Up Environment Variables**
+Create a `.env.local` file in the `client/` directory with the following:
+```env
+DATABASE_URL="file:./prisma/dev.db"
+JWT_SECRET=your_jwt_secret
+CLOUDINARY_CLOUD_NAME=your_cloud_name
+CLOUDINARY_API_KEY=your_api_key
+CLOUDINARY_API_SECRET=your_api_secret
+MAX_FILE_SIZE=10485760
+```
+- Get your Cloudinary credentials from [cloudinary.com](https://cloudinary.com/)
+- Set a strong `JWT_SECRET`
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+### 4. **Run Database Migrations**
+```bash
+npx prisma migrate deploy
+```
 
-## Learn More
+### 5. **Start the App**
+```bash
+npm run dev
+```
+- The app will be available at [http://localhost:3000](http://localhost:3000)
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 🧭 Navigation Guide
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+### **Login**
+- Go to `/login` to sign in as a lecturer.
+- Only existing lecturers can log in. New lecturers must be created by an admin/lecturer.
 
-## Deploy on Vercel
+### **Dashboard (Home)**
+- View all available materials.
+- Search for materials by title, subject, or course code.
+- Download or view files directly in your browser.
+- Delete your own files (if you are the uploader).
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### **Courses**
+- Go to `/courses` to see all your assigned courses.
+- Click a course to view all materials for that course.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+### **Upload Material**
+- Use the upload button (usually in the header or sidebar) to upload new materials.
+- Fill in the title, subject, course code, and select a file.
+- Only supported file types and sizes are allowed.
+
+### **Logout**
+- Use the logout button in the sidebar or header to securely sign out.
+
+---
+
+## 📝 Notes for Lecturers & Reviewers
+- **All files are stored securely on Cloudinary.**
+- **Only authenticated lecturers can upload, view, or delete materials.**
+- **Lecturer creation is restricted to authenticated users (no public signup).**
+- **Each file is auto-assigned to a course based on the course code.**
+- **Deleting a file removes it from both the app and Cloudinary.**
+- **Legacy local file support has been removed for security and scalability.**
+
+---
+
+## 📚 Tech Stack
+- **Frontend/Backend:** Next.js (App Router)
+- **Database:** Prisma + SQLite (easy to switch to PostgreSQL/MySQL)
+- **Cloud Storage:** Cloudinary
+- **Authentication:** JWT (HTTP-only cookies)
+- **UI:** React, Tailwind CSS, MUI Icons
+
+---
+
+## 💡 Tips
+- For best results, use Google Chrome or Microsoft Edge.
+- If you encounter any issues, check the browser console and server logs.
+- To add new lecturers, log in as an existing lecturer and use the "Add Lecturer" feature (if enabled).
+
+---
+
+## 👨‍🏫 For Your Lecturer/Reviewer
+- This project demonstrates secure file management, cloud integration, and modern web development best practices.
+- All code is well-commented and modular for easy review.
+- Please see the codebase for further documentation and comments.
+
+---
+
+**Thank you for reviewing this project!**
+
+If you have any questions or need a walkthrough, please contact the developer.
